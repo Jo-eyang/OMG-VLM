@@ -1,12 +1,14 @@
-# OMG-VLM
+# OMG-VLM: One Model, Many Graphs with Vision-Language Models
 
-Anonymous code release for **One Model, Many Graphs: Learning over Attributed Graphs across Heterogeneous Modalities with Vision-Language Models**.
+<img width="2857" height="1098" alt="OMG_figure2" src="https://github.com/user-attachments/assets/55c9afdc-3b6a-4ffb-95a1-1231a06c71aa" />
 
-OMG-VLM adapts a pretrained vision-language model for attributed graph learning across text-attributed graphs, image-attributed graphs, and multimodal-attributed graphs. The implementation uses Qwen-VL as the backbone and adds graph-aware image and text modules in the VLM embedding space.
+**OMG-VLM** is a unified VLM-based framework for attributed graph learning under heterogeneous modality schemas. This version builds on **Qwen-VL** and introduces structure-aware graph adapters that incorporate neighborhood information directly in the VLM-native embedding space.
+
+This repository provides the anonymous implementation for review. It contains the core model components, Qwen-VL integration utilities, the Qwen-VL training/evaluation backends used in our experiments, metric calculation utilities, and the default experimental configuration used in the paper.
 
 ## Note to Reviewers
 
-Thank you very much for reviewing our submission. This repository has been prepared as an anonymous research-code release: model checkpoints, datasets, logs, local paths, cluster job files, and temporary scripts are intentionally excluded. The base Qwen-VL weights should be downloaded separately. This repository contains the method implementation, training entry point, evaluation entry point, and configuration files needed to inspect and reproduce the submitted approach once the required data and weights are available.
+Thank you for taking the time to review our work! This repository is prepared to make the implementation of OMG-VLM inspectable during the anonymous review period. The code focuses on the method-specific components and the reproducible training/evaluation interface. The complete processed datasets will be released after paper acceptance. For the review period, this repository exposes the model architecture, graph-adapter implementation, Qwen-VL integration interface, training, evaluation, and metric computation code.
 
 ## File Structure
 
@@ -104,22 +106,10 @@ python evaluate_omg_vlm.py \
   --data_path /path/to/test.json \
   --neighbor_data_path /path/to/neighbors.json \
   --text_info_path /path/to/text_info.json \
-  --output_path outputs/omg_vlm/test_predictions.jsonl \
-  --max_new_tokens 64
+  --output_path outputs/omg_vlm/test_predictions.jsonl
 ```
 
 The evaluation script writes one JSON object per example, including the generated prediction, optional target answer, and optional exact-match score.
-
-## Repository Scope
-
-This release is intentionally lightweight. It includes the OMG-VLM modules and the Qwen-VL integration needed to run training and inference, but excludes:
-
-- pretrained or fine-tuned model weights;
-- raw or processed datasets;
-- experiment outputs, logs, and cached features;
-- machine-specific paths and cluster launch scripts.
-
-These files should be stored outside the repository and referenced through command-line arguments.
 
 ## Outputs
 
@@ -136,4 +126,4 @@ When LoRA is enabled, the LoRA adapter is saved in the same output directory by 
 
 ## Acknowledgment
 
-This codebase builds on Qwen-VL and widely used open-source tooling from the VLM/LLM ecosystem. We thank the authors and maintainers of Qwen-VL, Hugging Face Transformers, PEFT, FastChat, DeepSpeed, and related projects for making this research possible.
+This codebase builds on Qwen-VL and widely used open-source tooling from the VLM/LLM ecosystem. We thank the authors and maintainers of Qwen-VL, Hugging Face Transformers, PEFT, FastChat, DeepSpeed, and related projects for making this research possible!
