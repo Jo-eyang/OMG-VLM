@@ -2,7 +2,7 @@
     
 # OMG-VLM: One Model, Many Graphs with Vision-Language Models
 
-<img width="1600" alt="OMG_figure2" src="images/OMG_figure2.jpg" />
+<img width="1000" alt="OMG_figure2" src="images/OMG_figure2.jpg" />
 
 </div>
 
