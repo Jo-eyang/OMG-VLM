@@ -1,6 +1,6 @@
 # OMG-VLM: One Model, Many Graphs with Vision-Language Models
 
-<img width="2857" height="1098" alt="OMG_figure2" src="images/OMG_figure2.jpg" />
+<img width="800" alt="OMG_figure2" src="images/OMG_figure2.jpg" />
 
 **OMG-VLM** is a unified VLM-based framework for attributed graph learning under heterogeneous modality schemas. This version builds on **Qwen-VL** and introduces structure-aware graph adapters that incorporate neighborhood information directly in the VLM-native embedding space.
 
