@@ -1,0 +1,35 @@
+__pycache__/
+*.py[cod]
+.DS_Store
+.idea/
+.vscode/
+
+# Data, checkpoints, and experiment outputs should not be committed.
+data/
+dataset/
+datasets/
+logs/
+wandb/
+runs/
+outputs/
+eval_results/
+model_output/
+checkpoints/
+checkpoint-*/
+*.log
+*.out
+*.err
+*.pt
+*.pth
+*.bin
+*.safetensors
+*.ckpt
+*.onnx
+*.npy
+*.npz
+
+# Local copies of base models or downloaded fonts/assets.
+Qwen-VL-Chat/
+Qwen-VL-Chat-Int4/
+SimSun.ttf
+Qwen_VL_Chat/SimSun.ttf

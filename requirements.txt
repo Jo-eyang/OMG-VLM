@@ -1,0 +1,11 @@
+torch
+torchvision
+transformers>=4.31.0
+accelerate
+peft
+deepspeed
+tiktoken
+einops
+Pillow
+numpy
+matplotlib
