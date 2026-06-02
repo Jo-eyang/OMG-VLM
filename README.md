@@ -39,7 +39,7 @@
 
 ## Note to Reviewers
 
-Thank you for taking the time to review our work. This repository is prepared to make the implementation of OMG-VLM inspectable during the anonymous review period. It focuses on the method-specific modules and reproducible training/evaluation interfaces. The complete processed datasets will be released after paper acceptance.
+Thank you for taking the time to review our work! This repository is prepared to make the implementation of OMG-VLM inspectable during the anonymous review period. It focuses on the method-specific modules and reproducible training/evaluation interfaces. The complete processed datasets will be released after paper acceptance.
 
 During review, the repository exposes:
 
