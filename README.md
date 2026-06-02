@@ -2,17 +2,59 @@
     
 # OMG-VLM: One Model, Many Graphs with Vision-Language Models
 
-<img width="1000" alt="OMG_figure2" src="images/OMG_figure2.jpg" />
+<img width="1000" alt="OMG_figure2" src="assets/OMG_figure2.jpg" />
+
+[English](README.md) | [简体中文](assets/README.zh-CN.md) | [日本語](assets/README.ja.md) | [한국어](assets/README.ko.md) | [Español](assets/README.es.md) | [Français](assets/README.fr.md)
+
+![Python](https://img.shields.io/badge/Python-3.9%2B-3776AB?style=for-the-badge&logo=python&logoColor=white)
+![PyTorch](https://img.shields.io/badge/PyTorch-Graph--Aware%20VLM-EE4C2C?style=for-the-badge&logo=pytorch&logoColor=white)
+![Qwen-VL](https://img.shields.io/badge/Backbone-Qwen--VL-6B5BFF?style=for-the-badge)
+![DeepSpeed](https://img.shields.io/badge/Training-DeepSpeed%20ZeRO--2-1F7A8C?style=for-the-badge)
 
 </div>
 
-**OMG-VLM** is a unified VLM-based framework for attributed graph learning under heterogeneous modality schemas. This version builds on **Qwen-VL** and introduces structure-aware graph adapters that incorporate neighborhood information directly in the VLM-native embedding space.
+**OMG-VLM** is a unified vision-language framework for attributed graph learning under heterogeneous modality schemas. It builds on **Qwen-VL** and adds graph-aware adapters that inject neighborhood signals into the VLM-native embedding space for both image and text attributes.
 
-This repository provides the anonymous implementation for review. It contains the core model components, Qwen-VL integration utilities, the Qwen-VL training/evaluation backends used in our experiments, metric calculation utilities, and the default experimental configuration used in the paper.
+## Project Snapshot
+
+| Item | Description |
+| --- | --- |
+| Task family | Attributed graph learning with image, text, or mixed node attributes |
+| Backbone | Qwen-VL / Qwen-VL-Chat style causal VLM |
+| Graph modules | Graph-aware visual adapter and target-aware textual aggregation |
+| Training style | Supervised fine-tuning with optional LoRA and DeepSpeed ZeRO-2 |
+
+## Table of Contents
+
+- [Note to Reviewers](#note-to-reviewers)
+- [Highlights](#highlights)
+- [File Structure](#file-structure)
+- [Installation](#installation)
+- [Data Format](#data-format)
+- [Training](#training)
+- [Evaluation](#evaluation)
+- [Outputs](#outputs)
+- [Release Plan](#release-plan)
+- [Acknowledgment](#acknowledgment)
 
 ## Note to Reviewers
 
-Thank you for taking the time to review our work! This repository is prepared to make the implementation of OMG-VLM inspectable during the anonymous review period. The code focuses on the method-specific components and the reproducible training/evaluation interface. The complete processed datasets will be released after paper acceptance. For the review period, this repository exposes the model architecture, graph-adapter implementation, Qwen-VL integration interface, training, evaluation, and metric computation code.
+Thank you for taking the time to review our work. This repository is prepared to make the implementation of OMG-VLM inspectable during the anonymous review period. It focuses on the method-specific modules and reproducible training/evaluation interfaces. The complete processed datasets will be released after paper acceptance.
+
+During review, the repository exposes:
+
+- the OMG-VLM model architecture and graph-adapter implementation;
+- the Qwen-VL integration interface;
+- supervised fine-tuning and evaluation entry points;
+- prediction output and metric computation logic.
+
+## Highlights
+
+- **One model, many graphs:** a shared VLM backbone supports graph examples with image, text, or mixed attribute schemas.
+- **Graph-aware visual adapter:** center image features attend to compressed neighbor visual features in the Qwen-VL embedding space.
+- **Target-aware textual aggregation:** target node text retrieves and compresses neighbor text into learnable context tokens.
+- **Reproducible interface:** training and evaluation use conversation-format graph examples with explicit neighbor and text-attribute files.
+
 
 ## File Structure
 
@@ -21,6 +63,13 @@ OMG-VLM/
 |-- README.md
 |-- requirements.txt
 |-- ds_config_zero2.json
+|-- assets/
+|   |-- OMG_figure2.jpg
+|   |-- README.zh-CN.md
+|   |-- README.ja.md
+|   |-- README.ko.md
+|   |-- README.es.md
+|   `-- README.fr.md
 |-- train_omg_vlm.py
 |-- evaluate_omg_vlm.py
 |-- omg_vlm/
@@ -43,27 +92,51 @@ OMG-VLM/
 Key components:
 
 - `omg_vlm/image.py`: graph-aware image modules, including `GraphAwareVisualAdapter`, `PerNeighborVisualCompressor`, and `CenterConditionedVisualFusionLayer`.
-- `omg_vlm/text.py`: target-aware textual aggregation for retrieving neighborhood context from text attributes.
+- `omg_vlm/text.py`: target-aware textual aggregation modules for retrieving neighborhood context from text attributes.
 - `Qwen_VL_Chat/`: Qwen-VL backbone, tokenizer, generation utilities, and model integration code.
 - `train_omg_vlm.py`: supervised fine-tuning entry point.
 - `evaluate_omg_vlm.py`: evaluation entry point that writes JSONL predictions.
 - `ds_config_zero2.json`: DeepSpeed ZeRO-2 configuration used by the training script.
+- `assets/`: centralized repository assets, including figures and localized README files.
 
-## Quick Start
+## Installation
 
-Install dependencies:
+Install the Python dependencies:
 
 ```bash
 pip install -r requirements.txt
 ```
 
-Download the Qwen-VL-Chat base weights separately and keep them outside git, for example:
+Download the Qwen-VL-Chat base weights separately and keep them outside git:
 
 ```text
 /path/to/Qwen_VL_Chat
 ```
 
+## Data Format
+
 Prepare graph data in conversation format. Text nodes are represented as `<text>node_id</text>`, and image nodes are represented as `<img>/path/to/image.jpg</img>`.
+
+Conversation example:
+
+```json
+[
+  {
+    "id": "example_0",
+    "dataset_idx": 0,
+    "conversations": [
+      {
+        "from": "user",
+        "value": "Classify the node: <text>node_0</text>"
+      },
+      {
+        "from": "assistant",
+        "value": "label_name"
+      }
+    ]
+  }
+]
+```
 
 Neighbor file:
 
@@ -81,7 +154,11 @@ Text-attribute file:
 }
 ```
 
-Train:
+`neighbor_data_path` and `text_info_path` may also be comma-separated JSON paths. In that case, each example can use `dataset_idx` to select the corresponding dataset-specific neighbor and text-attribute dictionary.
+
+## Training
+
+Run supervised fine-tuning:
 
 ```bash
 torchrun --nproc_per_node 8 train_omg_vlm.py \
@@ -101,7 +178,17 @@ torchrun --nproc_per_node 8 train_omg_vlm.py \
   --textual_aggregation_context_tokens 16
 ```
 
-Evaluate:
+Useful options:
+
+- `--max_neighbors`: maximum number of graph neighbors injected per node.
+- `--use_lora`: enable PEFT LoRA fine-tuning.
+- `--train_only_visual_adapter`: train only graph-aware visual modules.
+- `--use_visual_compressor`: compress each neighbor image into learnable visual queries.
+- `--textual_aggregation_context_tokens`: number of `<nbr>` context tokens produced for text-neighbor aggregation.
+
+## Evaluation
+
+Generate predictions:
 
 ```bash
 python evaluate_omg_vlm.py \
@@ -127,6 +214,12 @@ outputs/omg_vlm/
 ```
 
 When LoRA is enabled, the LoRA adapter is saved in the same output directory by the Hugging Face/PEFT training utilities.
+
+## Release Plan
+
+- Method-specific implementation: available in this repository.
+- Training and evaluation scripts: available in this repository.
+- Complete processed datasets: to be released after paper acceptance.
 
 ## Acknowledgment
 
