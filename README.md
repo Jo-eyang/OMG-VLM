@@ -56,8 +56,6 @@ Jiayi Yang · Yifang Chen · Yuanfu Sun · Jiajin Liu · Qiaoyu Tan
 OMG-VLM/
 |-- README.md
 |-- CITATION.cff
-|-- NOTICE
-|-- QWEN_LICENSE
 |-- requirements.txt
 |-- ds_config_zero2.json
 |-- assets/
@@ -75,6 +73,8 @@ OMG-VLM/
 |   `-- text.py
 `-- Qwen_VL_Chat/
     |-- __init__.py
+    |-- LICENSE
+    |-- NOTICE
     |-- config.json
     |-- configuration_qwen.py
     |-- generation_config.json

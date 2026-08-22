@@ -1,7 +1,7 @@
 # Copyright (c) Alibaba Cloud.
 #
 # This source code is licensed under the license found in the
-# QWEN_LICENSE file in the root directory of this source tree.
+# LICENSE file in the root directory of this source tree.
 
 from collections import OrderedDict
 import math
@@ -500,4 +500,3 @@ class VisionTransformer(nn.Module):
             neighbor_features = self.encode_neighbor_images(neighbor_image_paths)
             
         return main_features, neighbor_features
-
