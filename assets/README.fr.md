@@ -6,9 +6,8 @@
 
 **Accepté à la conférence principale d'EMNLP 2026**
 
-Jiayi Yang<sup>†</sup> · Yifang Chen<sup>†</sup> · Yuanfu Sun · Jiajin Liu · Qiaoyu Tan
-
-<sub><em>† Contribution égale</em></sub>
+<p>Jiayi Yang<sup>†</sup> · Yifang Chen<sup>†</sup> · Yuanfu Sun · Jiajin Liu · Qiaoyu Tan<br>
+<sub><em>† Contribution égale</em></sub></p>
 
 [![Article](https://img.shields.io/badge/arXiv-2607.19128-B31B1B?style=flat-square&logo=arxiv&logoColor=white)](https://arxiv.org/abs/2607.19128)
 [![Code](https://img.shields.io/badge/GitHub-Code-181717?style=flat-square&logo=github)](https://github.com/Jo-eyang/OMG-VLM)
