@@ -1,21 +1,36 @@
 <div align="center">
     
-# OMG-VLM: One Model, Many Graphs with Vision-Language Models
+# OMG-VLM
 
-<img width="1000" alt="OMG_figure2" src="OMG_figure2.jpg" />
+### One Model, Many Graphs: Learning over Attributed Graphs across Heterogeneous Modalities with Vision-Language Models
+
+**已被 EMNLP 2026 Main Conference 接收**
+
+Jiayi Yang · Yifang Chen · Yuanfu Sun · Jiajin Liu · Qiaoyu Tan
+
+[![论文](https://img.shields.io/badge/arXiv-2607.19128-B31B1B?style=flat-square&logo=arxiv&logoColor=white)](https://arxiv.org/abs/2607.19128)
+[![代码](https://img.shields.io/badge/GitHub-Code-181717?style=flat-square&logo=github)](https://github.com/Jo-eyang/OMG-VLM)
+![Python](https://img.shields.io/badge/Python-3.9%2B-3776AB?style=flat-square&logo=python&logoColor=white)
+![PyTorch](https://img.shields.io/badge/PyTorch-EE4C2C?style=flat-square&logo=pytorch&logoColor=white)
+![Qwen-VL](https://img.shields.io/badge/Backbone-Qwen--VL-6B5BFF?style=flat-square)
 
 [English](../README.md) | [简体中文](README.zh-CN.md) | [日本語](README.ja.md) | [한국어](README.ko.md) | [Español](README.es.md) | [Français](README.fr.md)
 
-![Python](https://img.shields.io/badge/Python-3.9%2B-3776AB?style=for-the-badge&logo=python&logoColor=white)
-![PyTorch](https://img.shields.io/badge/PyTorch-Graph--Aware%20VLM-EE4C2C?style=for-the-badge&logo=pytorch&logoColor=white)
-![Qwen-VL](https://img.shields.io/badge/Backbone-Qwen--VL-6B5BFF?style=for-the-badge)
-![DeepSpeed](https://img.shields.io/badge/Training-DeepSpeed%20ZeRO--2-1F7A8C?style=for-the-badge)
+<br>
+
+[概览](#概览) · [快速开始](#快速开始) · [数据格式](#数据格式) · [训练](#训练) · [评测](#评测) · [引用](#引用)
+
+<br>
+
+<img width="900" alt="OMG-VLM 框架概览" src="OMG_figure2.jpg" />
+
+<p><em>使用同一个视觉语言主干统一学习文本属性图、图像属性图和多模态属性图。</em></p>
 
 </div>
 
-**OMG-VLM** 是一个面向异构属性图学习的统一视觉语言框架。它基于 **Qwen-VL** 构建，并引入图感知适配器，将邻域结构信息直接注入 VLM 原生的图像和文本嵌入空间。
+## 概览
 
-## 项目速览
+**OMG-VLM** 是一个面向异构属性图学习的统一视觉语言框架。它基于 **Qwen-VL** 构建，并引入图感知适配器，将邻域结构信息直接注入 VLM 原生的图像和文本嵌入空间。
 
 | 项目 | 说明 |
 | --- | --- |
@@ -23,30 +38,6 @@
 | 模型主干 | Qwen-VL / Qwen-VL-Chat 风格的因果 VLM |
 | 图模块 | 图感知视觉适配器与目标感知文本聚合 |
 | 训练方式 | 监督微调，支持 LoRA 与 DeepSpeed ZeRO-2 |
-
-## 目录
-
-- [给审稿人的说明](#给审稿人的说明)
-- [核心特性](#核心特性)
-- [文件结构](#文件结构)
-- [安装](#安装)
-- [数据格式](#数据格式)
-- [训练](#训练)
-- [评测](#评测)
-- [输出](#输出)
-- [发布计划](#发布计划)
-- [致谢](#致谢)
-
-## 给审稿人的说明
-
-感谢您审阅我们的工作。本仓库用于在匿名评审阶段开放 OMG-VLM 的核心实现，重点覆盖方法相关模块以及可复现的训练、评测接口。完整处理后的数据集将在论文接收后发布。
-
-评审期间，本仓库包含：
-
-- OMG-VLM 模型结构与图适配器实现；
-- Qwen-VL 集成接口；
-- 监督微调与评测入口；
-- 预测输出与指标计算逻辑。
 
 ## 核心特性
 
@@ -58,9 +49,15 @@
 
 ## 文件结构
 
+<details>
+<summary>展开仓库结构</summary>
+
 ```text
 OMG-VLM/
 |-- README.md
+|-- CITATION.cff
+|-- NOTICE
+|-- QWEN_LICENSE
 |-- requirements.txt
 |-- ds_config_zero2.json
 |-- assets/
@@ -89,6 +86,8 @@ OMG-VLM/
     `-- visual.py
 ```
 
+</details>
+
 主要组件：
 
 - `omg_vlm/image.py`：图感知图像模块，包括 `GraphAwareVisualAdapter`、`PerNeighborVisualCompressor` 和 `CenterConditionedVisualFusionLayer`。
@@ -99,19 +98,27 @@ OMG-VLM/
 - `ds_config_zero2.json`：训练脚本使用的 DeepSpeed ZeRO-2 配置。
 - `assets/`：集中存放仓库资源，包括图示和本地化 README 文件。
 
-## 安装
+## 快速开始
 
-安装 Python 依赖：
+> 推荐使用 Python 3.9+ 和支持 CUDA 的运行环境。
+
+克隆仓库并创建独立环境：
 
 ```bash
+git clone https://github.com/Jo-eyang/OMG-VLM.git
+cd OMG-VLM
+conda create -n omg-vlm python=3.9 -y
+conda activate omg-vlm
 pip install -r requirements.txt
 ```
 
-请单独下载 Qwen-VL-Chat 基座权重，并将其放在 git 仓库之外：
+请单独下载 [Qwen-VL-Chat](https://huggingface.co/Qwen/Qwen-VL-Chat) 基座权重，并将其放在 git 仓库之外：
 
 ```text
 /path/to/Qwen_VL_Chat
 ```
+
+按照[数据格式](#数据格式)准备 conversation、邻居和文本属性 JSON 文件，然后使用[训练](#训练)和[评测](#评测)中的命令。
 
 ## 数据格式
 
@@ -215,11 +222,18 @@ outputs/omg_vlm/
 
 启用 LoRA 时，Hugging Face/PEFT 训练工具会将 LoRA adapter 保存到同一输出目录。
 
-## 发布计划
+## 引用
 
-- 方法相关实现：已在本仓库开放。
-- 训练与评测脚本：已在本仓库开放。
-- 完整处理后的数据集：论文接收后发布。
+如果 OMG-VLM 对您的研究有帮助，请引用我们的论文：
+
+```bibtex
+@inproceedings{yang2026one,
+  title={One Model, Many Graphs: Learning over Attributed Graphs across Heterogeneous Modalities with Vision-Language Models},
+  author={Yang, Jiayi and Chen, Yifang and Sun, Yuanfu and Liu, Jiajin and Tan, Qiaoyu},
+  booktitle={Proceedings of the 2026 Conference on Empirical Methods in Natural Language Processing},
+  year={2026}
+}
+```
 
 ## 致谢
 

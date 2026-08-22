@@ -1,21 +1,36 @@
 <div align="center">
     
-# OMG-VLM: One Model, Many Graphs with Vision-Language Models
+# OMG-VLM
 
-<img width="1000" alt="OMG_figure2" src="assets/OMG_figure2.jpg" />
+### One Model, Many Graphs: Learning over Attributed Graphs across Heterogeneous Modalities with Vision-Language Models
+
+**Accepted at EMNLP 2026 · Main Conference**
+
+Jiayi Yang · Yifang Chen · Yuanfu Sun · Jiajin Liu · Qiaoyu Tan
+
+[![Paper](https://img.shields.io/badge/arXiv-2607.19128-B31B1B?style=flat-square&logo=arxiv&logoColor=white)](https://arxiv.org/abs/2607.19128)
+[![Code](https://img.shields.io/badge/GitHub-Code-181717?style=flat-square&logo=github)](https://github.com/Jo-eyang/OMG-VLM)
+![Python](https://img.shields.io/badge/Python-3.9%2B-3776AB?style=flat-square&logo=python&logoColor=white)
+![PyTorch](https://img.shields.io/badge/PyTorch-EE4C2C?style=flat-square&logo=pytorch&logoColor=white)
+![Qwen-VL](https://img.shields.io/badge/Backbone-Qwen--VL-6B5BFF?style=flat-square)
 
 [English](README.md) | [简体中文](assets/README.zh-CN.md) | [日本語](assets/README.ja.md) | [한국어](assets/README.ko.md) | [Español](assets/README.es.md) | [Français](assets/README.fr.md)
 
-![Python](https://img.shields.io/badge/Python-3.9%2B-3776AB?style=for-the-badge&logo=python&logoColor=white)
-![PyTorch](https://img.shields.io/badge/PyTorch-Graph--Aware%20VLM-EE4C2C?style=for-the-badge&logo=pytorch&logoColor=white)
-![Qwen-VL](https://img.shields.io/badge/Backbone-Qwen--VL-6B5BFF?style=for-the-badge)
-![DeepSpeed](https://img.shields.io/badge/Training-DeepSpeed%20ZeRO--2-1F7A8C?style=for-the-badge)
+<br>
+
+[Overview](#overview) · [Quick Start](#quick-start) · [Data Format](#data-format) · [Training](#training) · [Evaluation](#evaluation) · [Citation](#citation)
+
+<br>
+
+<img width="900" alt="Overview of the OMG-VLM framework" src="assets/OMG_figure2.jpg" />
+
+<p><em>One shared vision-language backbone for text-attributed, image-attributed, and multimodal graphs.</em></p>
 
 </div>
 
-**OMG-VLM** is a unified vision-language framework for attributed graph learning under heterogeneous modality schemas. It builds on **Qwen-VL** and adds graph-aware adapters that inject neighborhood signals into the VLM-native embedding space for both image and text attributes.
+## Overview
 
-## Project Snapshot
+**OMG-VLM** is a unified vision-language framework for attributed graph learning under heterogeneous modality schemas. It builds on **Qwen-VL** and adds graph-aware adapters that inject neighborhood signals into the VLM-native embedding space for both image and text attributes.
 
 | Item | Description |
 | --- | --- |
@@ -23,30 +38,6 @@
 | Backbone | Qwen-VL / Qwen-VL-Chat style causal VLM |
 | Graph modules | Graph-aware visual adapter and target-aware textual aggregation |
 | Training style | Supervised fine-tuning with optional LoRA and DeepSpeed ZeRO-2 |
-
-## Table of Contents
-
-- [Note to Reviewers](#note-to-reviewers)
-- [Highlights](#highlights)
-- [File Structure](#file-structure)
-- [Installation](#installation)
-- [Data Format](#data-format)
-- [Training](#training)
-- [Evaluation](#evaluation)
-- [Outputs](#outputs)
-- [Release Plan](#release-plan)
-- [Acknowledgment](#acknowledgment)
-
-## Note to Reviewers
-
-Thank you for taking the time to review our work! This repository is prepared to make the implementation of OMG-VLM inspectable during the anonymous review period. It focuses on the method-specific modules and reproducible training/evaluation interfaces. The complete processed datasets will be released after paper acceptance.
-
-During review, the repository exposes:
-
-- the OMG-VLM model architecture and graph-adapter implementation;
-- the Qwen-VL integration interface;
-- supervised fine-tuning and evaluation entry points;
-- prediction output and metric computation logic.
 
 ## Highlights
 
@@ -58,9 +49,15 @@ During review, the repository exposes:
 
 ## File Structure
 
+<details>
+<summary>Expand repository layout</summary>
+
 ```text
 OMG-VLM/
 |-- README.md
+|-- CITATION.cff
+|-- NOTICE
+|-- QWEN_LICENSE
 |-- requirements.txt
 |-- ds_config_zero2.json
 |-- assets/
@@ -89,6 +86,8 @@ OMG-VLM/
     `-- visual.py
 ```
 
+</details>
+
 Key components:
 
 - `omg_vlm/image.py`: graph-aware image modules, including `GraphAwareVisualAdapter`, `PerNeighborVisualCompressor`, and `CenterConditionedVisualFusionLayer`.
@@ -99,19 +98,27 @@ Key components:
 - `ds_config_zero2.json`: DeepSpeed ZeRO-2 configuration used by the training script.
 - `assets/`: centralized repository assets, including figures and localized README files.
 
-## Installation
+## Quick Start
 
-Install the Python dependencies:
+> Python 3.9+ and a CUDA-capable environment are recommended.
+
+Clone the repository and create an isolated environment:
 
 ```bash
+git clone https://github.com/Jo-eyang/OMG-VLM.git
+cd OMG-VLM
+conda create -n omg-vlm python=3.9 -y
+conda activate omg-vlm
 pip install -r requirements.txt
 ```
 
-Download the Qwen-VL-Chat base weights separately and keep them outside git:
+Download the [Qwen-VL-Chat](https://huggingface.co/Qwen/Qwen-VL-Chat) base weights separately and keep them outside git:
 
 ```text
 /path/to/Qwen_VL_Chat
 ```
+
+Prepare the conversation, neighbor, and text-attribute JSON files as described in [Data Format](#data-format), then use the commands in [Training](#training) and [Evaluation](#evaluation).
 
 ## Data Format
 
@@ -215,11 +222,18 @@ outputs/omg_vlm/
 
 When LoRA is enabled, the LoRA adapter is saved in the same output directory by the Hugging Face/PEFT training utilities.
 
-## Release Plan
+## Citation
 
-- Method-specific implementation: available in this repository.
-- Training and evaluation scripts: available in this repository.
-- Complete processed datasets: to be released after paper acceptance.
+If you find OMG-VLM useful, please cite our paper:
+
+```bibtex
+@inproceedings{yang2026one,
+  title={One Model, Many Graphs: Learning over Attributed Graphs across Heterogeneous Modalities with Vision-Language Models},
+  author={Yang, Jiayi and Chen, Yifang and Sun, Yuanfu and Liu, Jiajin and Tan, Qiaoyu},
+  booktitle={Proceedings of the 2026 Conference on Empirical Methods in Natural Language Processing},
+  year={2026}
+}
+```
 
 ## Acknowledgment
 

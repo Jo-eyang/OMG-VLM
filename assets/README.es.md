@@ -1,21 +1,36 @@
 <div align="center">
     
-# OMG-VLM: One Model, Many Graphs with Vision-Language Models
+# OMG-VLM
 
-<img width="1000" alt="OMG_figure2" src="OMG_figure2.jpg" />
+### One Model, Many Graphs: Learning over Attributed Graphs across Heterogeneous Modalities with Vision-Language Models
+
+**Aceptado en la conferencia principal de EMNLP 2026**
+
+Jiayi Yang · Yifang Chen · Yuanfu Sun · Jiajin Liu · Qiaoyu Tan
+
+[![Artículo](https://img.shields.io/badge/arXiv-2607.19128-B31B1B?style=flat-square&logo=arxiv&logoColor=white)](https://arxiv.org/abs/2607.19128)
+[![Código](https://img.shields.io/badge/GitHub-Code-181717?style=flat-square&logo=github)](https://github.com/Jo-eyang/OMG-VLM)
+![Python](https://img.shields.io/badge/Python-3.9%2B-3776AB?style=flat-square&logo=python&logoColor=white)
+![PyTorch](https://img.shields.io/badge/PyTorch-EE4C2C?style=flat-square&logo=pytorch&logoColor=white)
+![Qwen-VL](https://img.shields.io/badge/Backbone-Qwen--VL-6B5BFF?style=flat-square)
 
 [English](../README.md) | [简体中文](README.zh-CN.md) | [日本語](README.ja.md) | [한국어](README.ko.md) | [Español](README.es.md) | [Français](README.fr.md)
 
-![Python](https://img.shields.io/badge/Python-3.9%2B-3776AB?style=for-the-badge&logo=python&logoColor=white)
-![PyTorch](https://img.shields.io/badge/PyTorch-Graph--Aware%20VLM-EE4C2C?style=for-the-badge&logo=pytorch&logoColor=white)
-![Qwen-VL](https://img.shields.io/badge/Backbone-Qwen--VL-6B5BFF?style=for-the-badge)
-![DeepSpeed](https://img.shields.io/badge/Training-DeepSpeed%20ZeRO--2-1F7A8C?style=for-the-badge)
+<br>
+
+[Resumen](#resumen) · [Inicio rápido](#inicio-rápido) · [Formato de datos](#formato-de-datos) · [Entrenamiento](#entrenamiento) · [Evaluación](#evaluación) · [Citación](#citación)
+
+<br>
+
+<img width="900" alt="Descripción general del framework OMG-VLM" src="OMG_figure2.jpg" />
+
+<p><em>Un único backbone de visión-lenguaje para grafos con atributos textuales, visuales y multimodales.</em></p>
 
 </div>
 
-**OMG-VLM** es un marco unificado de visión-lenguaje para aprendizaje en grafos atribuidos con esquemas de modalidad heterogéneos. Está construido sobre **Qwen-VL** y añade adaptadores conscientes de la estructura del grafo que inyectan señales de vecindad en el espacio de embeddings nativo del VLM, tanto para atributos de imagen como de texto.
+## Resumen
 
-## Resumen del proyecto
+**OMG-VLM** es un marco unificado de visión-lenguaje para aprendizaje en grafos atribuidos con esquemas de modalidad heterogéneos. Está construido sobre **Qwen-VL** y añade adaptadores conscientes de la estructura del grafo que inyectan señales de vecindad en el espacio de embeddings nativo del VLM, tanto para atributos de imagen como de texto.
 
 | Elemento | Descripción |
 | --- | --- |
@@ -23,30 +38,6 @@
 | Backbone | VLM causal estilo Qwen-VL / Qwen-VL-Chat |
 | Módulos de grafo | Adaptador visual consciente del grafo y agregación textual consciente del objetivo |
 | Entrenamiento | Ajuste fino supervisado con LoRA opcional y DeepSpeed ZeRO-2 |
-
-## Índice
-
-- [Nota para revisores](#nota-para-revisores)
-- [Características principales](#características-principales)
-- [Estructura de archivos](#estructura-de-archivos)
-- [Instalación](#instalación)
-- [Formato de datos](#formato-de-datos)
-- [Entrenamiento](#entrenamiento)
-- [Evaluación](#evaluación)
-- [Salidas](#salidas)
-- [Plan de publicación](#plan-de-publicación)
-- [Agradecimientos](#agradecimientos)
-
-## Nota para revisores
-
-Gracias por revisar nuestro trabajo. Este repositorio está preparado para que la implementación de OMG-VLM sea inspeccionable durante el periodo de revisión anónima. Se centra en los módulos específicos del método y en interfaces reproducibles de entrenamiento y evaluación. Los conjuntos de datos procesados completos se publicarán después de la aceptación del artículo.
-
-Durante la revisión, el repositorio expone:
-
-- la arquitectura de OMG-VLM y la implementación de los adaptadores de grafo;
-- la interfaz de integración con Qwen-VL;
-- puntos de entrada para ajuste fino supervisado y evaluación;
-- lógica de salida de predicciones y cálculo de métricas.
 
 ## Características principales
 
@@ -58,9 +49,15 @@ Durante la revisión, el repositorio expone:
 
 ## Estructura de archivos
 
+<details>
+<summary>Mostrar la estructura del repositorio</summary>
+
 ```text
 OMG-VLM/
 |-- README.md
+|-- CITATION.cff
+|-- NOTICE
+|-- QWEN_LICENSE
 |-- requirements.txt
 |-- ds_config_zero2.json
 |-- assets/
@@ -89,6 +86,8 @@ OMG-VLM/
     `-- visual.py
 ```
 
+</details>
+
 Componentes clave:
 
 - `omg_vlm/image.py`: módulos de imagen conscientes del grafo, incluidos `GraphAwareVisualAdapter`, `PerNeighborVisualCompressor` y `CenterConditionedVisualFusionLayer`.
@@ -99,19 +98,27 @@ Componentes clave:
 - `ds_config_zero2.json`: configuración DeepSpeed ZeRO-2 usada por el script de entrenamiento.
 - `assets/`: directorio centralizado para recursos del repositorio, incluidas figuras y archivos README localizados.
 
-## Instalación
+## Inicio rápido
 
-Instala las dependencias de Python:
+> Se recomienda Python 3.9+ y un entorno compatible con CUDA.
+
+Clona el repositorio y crea un entorno aislado:
 
 ```bash
+git clone https://github.com/Jo-eyang/OMG-VLM.git
+cd OMG-VLM
+conda create -n omg-vlm python=3.9 -y
+conda activate omg-vlm
 pip install -r requirements.txt
 ```
 
-Descarga por separado los pesos base de Qwen-VL-Chat y mantenlos fuera de git:
+Descarga por separado los pesos base de [Qwen-VL-Chat](https://huggingface.co/Qwen/Qwen-VL-Chat) y mantenlos fuera de git:
 
 ```text
 /path/to/Qwen_VL_Chat
 ```
+
+Prepara los archivos JSON de conversation, vecinos y atributos textuales como se describe en [Formato de datos](#formato-de-datos), y utiliza después los comandos de [Entrenamiento](#entrenamiento) y [Evaluación](#evaluación).
 
 ## Formato de datos
 
@@ -215,11 +222,18 @@ outputs/omg_vlm/
 
 Cuando LoRA está habilitado, las utilidades de Hugging Face/PEFT guardan el adaptador LoRA en el mismo directorio de salida.
 
-## Plan de publicación
+## Citación
 
-- Implementación específica del método: disponible en este repositorio.
-- Scripts de entrenamiento y evaluación: disponibles en este repositorio.
-- Conjuntos de datos procesados completos: se publicarán después de la aceptación del artículo.
+Si OMG-VLM resulta útil para tu investigación, cita nuestro artículo:
+
+```bibtex
+@inproceedings{yang2026one,
+  title={One Model, Many Graphs: Learning over Attributed Graphs across Heterogeneous Modalities with Vision-Language Models},
+  author={Yang, Jiayi and Chen, Yifang and Sun, Yuanfu and Liu, Jiajin and Tan, Qiaoyu},
+  booktitle={Proceedings of the 2026 Conference on Empirical Methods in Natural Language Processing},
+  year={2026}
+}
+```
 
 ## Agradecimientos
 

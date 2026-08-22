@@ -1,0 +1,33 @@
+cff-version: 1.2.0
+message: "If you use OMG-VLM in your research, please cite our paper."
+title: "OMG-VLM"
+type: software
+authors:
+  - family-names: Yang
+    given-names: Jiayi
+  - family-names: Chen
+    given-names: Yifang
+  - family-names: Sun
+    given-names: Yuanfu
+  - family-names: Liu
+    given-names: Jiajin
+  - family-names: Tan
+    given-names: Qiaoyu
+repository-code: "https://github.com/Jo-eyang/OMG-VLM"
+url: "https://arxiv.org/abs/2607.19128"
+preferred-citation:
+  type: conference-paper
+  title: "One Model, Many Graphs: Learning over Attributed Graphs across Heterogeneous Modalities with Vision-Language Models"
+  authors:
+    - family-names: Yang
+      given-names: Jiayi
+    - family-names: Chen
+      given-names: Yifang
+    - family-names: Sun
+      given-names: Yuanfu
+    - family-names: Liu
+      given-names: Jiajin
+    - family-names: Tan
+      given-names: Qiaoyu
+  collection-title: "Proceedings of the 2026 Conference on Empirical Methods in Natural Language Processing"
+  year: 2026

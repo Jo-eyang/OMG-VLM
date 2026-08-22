@@ -1,7 +1,7 @@
 # Copyright (c) Alibaba Cloud.
 #
 # This source code is licensed under the license found in the
-# LICENSE file in the root directory of this source tree.
+# QWEN_LICENSE file in the root directory of this source tree.
 
 from transformers import PretrainedConfig
 

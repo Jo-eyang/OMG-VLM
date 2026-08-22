@@ -1,21 +1,36 @@
 <div align="center">
     
-# OMG-VLM: One Model, Many Graphs with Vision-Language Models
+# OMG-VLM
 
-<img width="1000" alt="OMG_figure2" src="OMG_figure2.jpg" />
+### One Model, Many Graphs: Learning over Attributed Graphs across Heterogeneous Modalities with Vision-Language Models
+
+**EMNLP 2026 Main Conference 채택 논문**
+
+Jiayi Yang · Yifang Chen · Yuanfu Sun · Jiajin Liu · Qiaoyu Tan
+
+[![논문](https://img.shields.io/badge/arXiv-2607.19128-B31B1B?style=flat-square&logo=arxiv&logoColor=white)](https://arxiv.org/abs/2607.19128)
+[![코드](https://img.shields.io/badge/GitHub-Code-181717?style=flat-square&logo=github)](https://github.com/Jo-eyang/OMG-VLM)
+![Python](https://img.shields.io/badge/Python-3.9%2B-3776AB?style=flat-square&logo=python&logoColor=white)
+![PyTorch](https://img.shields.io/badge/PyTorch-EE4C2C?style=flat-square&logo=pytorch&logoColor=white)
+![Qwen-VL](https://img.shields.io/badge/Backbone-Qwen--VL-6B5BFF?style=flat-square)
 
 [English](../README.md) | [简体中文](README.zh-CN.md) | [日本語](README.ja.md) | [한국어](README.ko.md) | [Español](README.es.md) | [Français](README.fr.md)
 
-![Python](https://img.shields.io/badge/Python-3.9%2B-3776AB?style=for-the-badge&logo=python&logoColor=white)
-![PyTorch](https://img.shields.io/badge/PyTorch-Graph--Aware%20VLM-EE4C2C?style=for-the-badge&logo=pytorch&logoColor=white)
-![Qwen-VL](https://img.shields.io/badge/Backbone-Qwen--VL-6B5BFF?style=for-the-badge)
-![DeepSpeed](https://img.shields.io/badge/Training-DeepSpeed%20ZeRO--2-1F7A8C?style=for-the-badge)
+<br>
+
+[개요](#개요) · [빠른 시작](#빠른-시작) · [데이터 형식](#데이터-형식) · [학습](#학습) · [평가](#평가) · [인용](#인용)
+
+<br>
+
+<img width="900" alt="OMG-VLM 프레임워크 개요" src="OMG_figure2.jpg" />
+
+<p><em>하나의 비전-언어 백본으로 텍스트 속성, 이미지 속성, 멀티모달 속성 그래프를 통합 학습합니다.</em></p>
 
 </div>
 
-**OMG-VLM**은 이질적인 모달리티 스키마를 가진 속성 그래프 학습을 위한 통합 비전-언어 프레임워크입니다. **Qwen-VL**을 기반으로 하며, 이미지와 텍스트 속성 모두에 대해 이웃 구조 정보를 VLM 고유 임베딩 공간에 주입하는 그래프 인식 어댑터를 추가합니다.
+## 개요
 
-## 프로젝트 요약
+**OMG-VLM**은 이질적인 모달리티 스키마를 가진 속성 그래프 학습을 위한 통합 비전-언어 프레임워크입니다. **Qwen-VL**을 기반으로 하며, 이미지와 텍스트 속성 모두에 대해 이웃 구조 정보를 VLM 고유 임베딩 공간에 주입하는 그래프 인식 어댑터를 추가합니다.
 
 | 항목 | 설명 |
 | --- | --- |
@@ -23,30 +38,6 @@
 | 백본 | Qwen-VL / Qwen-VL-Chat 스타일 causal VLM |
 | 그래프 모듈 | 그래프 인식 비주얼 어댑터와 타깃 인식 텍스트 집계 |
 | 학습 방식 | LoRA 및 DeepSpeed ZeRO-2를 지원하는 지도 미세조정 |
-
-## 목차
-
-- [리뷰어를 위한 안내](#리뷰어를-위한-안내)
-- [주요 특징](#주요-특징)
-- [파일 구조](#파일-구조)
-- [설치](#설치)
-- [데이터 형식](#데이터-형식)
-- [학습](#학습)
-- [평가](#평가)
-- [출력](#출력)
-- [공개 계획](#공개-계획)
-- [감사의 말](#감사의-말)
-
-## 리뷰어를 위한 안내
-
-저희 작업을 검토해 주셔서 감사합니다. 이 저장소는 익명 리뷰 기간 동안 OMG-VLM 구현을 확인할 수 있도록 준비되었습니다. 방법론에 특화된 모듈과 재현 가능한 학습 및 평가 인터페이스에 초점을 맞추고 있습니다. 완전히 처리된 데이터셋은 논문 승인 이후 공개할 예정입니다.
-
-리뷰 기간 동안 이 저장소는 다음 내용을 제공합니다.
-
-- OMG-VLM 모델 구조와 그래프 어댑터 구현
-- Qwen-VL 통합 인터페이스
-- 지도 미세조정 및 평가 엔트리 포인트
-- 예측 출력과 지표 계산 로직
 
 ## 주요 특징
 
@@ -58,9 +49,15 @@
 
 ## 파일 구조
 
+<details>
+<summary>저장소 구조 펼치기</summary>
+
 ```text
 OMG-VLM/
 |-- README.md
+|-- CITATION.cff
+|-- NOTICE
+|-- QWEN_LICENSE
 |-- requirements.txt
 |-- ds_config_zero2.json
 |-- assets/
@@ -89,6 +86,8 @@ OMG-VLM/
     `-- visual.py
 ```
 
+</details>
+
 주요 구성 요소:
 
 - `omg_vlm/image.py`: `GraphAwareVisualAdapter`, `PerNeighborVisualCompressor`, `CenterConditionedVisualFusionLayer`를 포함한 그래프 인식 이미지 모듈.
@@ -99,19 +98,27 @@ OMG-VLM/
 - `ds_config_zero2.json`: 학습 스크립트에서 사용하는 DeepSpeed ZeRO-2 설정.
 - `assets/`: 그림과 현지화된 README 파일을 한곳에 모아 둔 저장소 자산 디렉터리.
 
-## 설치
+## 빠른 시작
 
-Python 의존성을 설치합니다.
+> Python 3.9 이상과 CUDA 지원 환경을 권장합니다.
+
+저장소를 복제하고 독립된 환경을 만듭니다.
 
 ```bash
+git clone https://github.com/Jo-eyang/OMG-VLM.git
+cd OMG-VLM
+conda create -n omg-vlm python=3.9 -y
+conda activate omg-vlm
 pip install -r requirements.txt
 ```
 
-Qwen-VL-Chat 베이스 가중치는 별도로 다운로드하고 git 저장소 밖에 보관하세요.
+[Qwen-VL-Chat](https://huggingface.co/Qwen/Qwen-VL-Chat) 베이스 가중치는 별도로 다운로드하고 git 저장소 밖에 보관하세요.
 
 ```text
 /path/to/Qwen_VL_Chat
 ```
+
+[데이터 형식](#데이터-형식)에 따라 conversation, 이웃 및 텍스트 속성 JSON 파일을 준비한 다음 [학습](#학습)과 [평가](#평가)의 명령을 사용하세요.
 
 ## 데이터 형식
 
@@ -215,11 +222,18 @@ outputs/omg_vlm/
 
 LoRA를 활성화하면 Hugging Face/PEFT 학습 유틸리티가 LoRA adapter도 같은 출력 디렉터리에 저장합니다.
 
-## 공개 계획
+## 인용
 
-- 방법론별 구현: 이 저장소에 공개됨.
-- 학습 및 평가 스크립트: 이 저장소에 공개됨.
-- 완전히 처리된 데이터셋: 논문 승인 후 공개 예정.
+OMG-VLM이 연구에 도움이 되었다면 다음 논문을 인용해 주세요.
+
+```bibtex
+@inproceedings{yang2026one,
+  title={One Model, Many Graphs: Learning over Attributed Graphs across Heterogeneous Modalities with Vision-Language Models},
+  author={Yang, Jiayi and Chen, Yifang and Sun, Yuanfu and Liu, Jiajin and Tan, Qiaoyu},
+  booktitle={Proceedings of the 2026 Conference on Empirical Methods in Natural Language Processing},
+  year={2026}
+}
+```
 
 ## 감사의 말
 
