@@ -49,9 +49,6 @@ Jiayi Yang · Yifang Chen · Yuanfu Sun · Jiajin Liu · Qiaoyu Tan
 
 ## 文件结构
 
-<details>
-<summary>展开仓库结构</summary>
-
 ```text
 OMG-VLM/
 |-- README.md
@@ -85,8 +82,6 @@ OMG-VLM/
     |-- tokenizer_config.json
     `-- visual.py
 ```
-
-</details>
 
 主要组件：
 

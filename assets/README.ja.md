@@ -49,9 +49,6 @@ Jiayi Yang · Yifang Chen · Yuanfu Sun · Jiajin Liu · Qiaoyu Tan
 
 ## ファイル構成
 
-<details>
-<summary>リポジトリ構成を表示</summary>
-
 ```text
 OMG-VLM/
 |-- README.md
@@ -85,8 +82,6 @@ OMG-VLM/
     |-- tokenizer_config.json
     `-- visual.py
 ```
-
-</details>
 
 主要コンポーネント:
 
